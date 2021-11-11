@@ -8,21 +8,37 @@ datasource db {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  titulo    String    @db.VarChar(255)
+  id        Int      @id @default(autoincrement())
+  titulo    String   @db.VarChar(255)
   conteudo  String
   autorid   Int
-  publicado Boolean   @default(false)
+  publicado Boolean  @default(false)
   createdat DateTime @default(now()) @db.Timestamp(0)
   autor     User     @relation(fields: [autorid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Review    Review[]
+
   @@map("posts")
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  nome      String    @db.VarChar(255)
-  email     String    @db.VarChar(255)
+  id        Int      @id @default(autoincrement())
+  nome      String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
   createdat DateTime @default(now()) @db.Timestamp(0)
   posts     Post[]
+  Review    Review[]
+
   @@map("users")
+}
+
+model Review {
+  id         Int  @id @default(autoincrement())
+  postId     Int
+  reviewerId Int
+  nota       Int
+  post       Post @relation(fields: [postId], references: [id])
+  reviewer   User @relation(fields: [reviewerId], references: [id])
+  createdAt DateTime?
+
+  @@map("reviews")
 }
