@@ -1,8 +1,12 @@
-const { ApolloServer, gql } = require('apollo-server')
-const { PrismaClient } = require('@prisma/client')
+const { ApolloServer } = require('apollo-server')
+const { PrismaClient } = require('@prisma/client');
+const schema = require('./schema');
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({ log: ['query'] });
 
+
+//typeDefs e resolvers que eram passados pro servidor mas foram substituidos pelo schema do nexus 
+/*
 const typeDefs = gql`
 scalar DateTime
  type User {
@@ -29,7 +33,6 @@ type Post {
    createUserAndPost (nome: String, email: String, titulo: String, conteudo: String): User
  }
 `
-
 const resolvers = {
  Query: {
    users: async () => await prisma.user.findMany({
@@ -61,6 +64,7 @@ const resolvers = {
   }
  }
 }
+*/
 
-const server = new ApolloServer({ typeDefs, resolvers, context: prisma })
+const server = new ApolloServer({ schema, context: { prisma } })
 server.listen({ port: 4000 }, () => console.log(`Servidor pronto em localhost:4000`)) 
