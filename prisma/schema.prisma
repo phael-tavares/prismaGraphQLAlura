@@ -38,7 +38,7 @@ model Review {
   nota       Int
   post       Post @relation(fields: [postId], references: [id])
   reviewer   User @relation(fields: [reviewerId], references: [id])
-  createdAt DateTime?
+  createdAt DateTime? @default(now())
 
   @@map("reviews")
 }
